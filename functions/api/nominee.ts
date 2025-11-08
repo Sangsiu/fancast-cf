@@ -14,8 +14,8 @@ export async function onRequest(context: any) {
 
   const headers: Record<string, string> = {
     "user-agent": "Dart/3.7 (dart:io)",
-    "x-api-token": env.X_API_TOKEN,           // set di CF Pages → Settings → Environment variables
-    "connection": "Keep-Alive",
+    "x-api-token": env.X_API_TOKEN,
+    connection: "Keep-Alive",
     "community-tab-index": "0",
     "accept-encoding": "gzip",
     "system-language": "en-US",
@@ -23,28 +23,27 @@ export async function onRequest(context: any) {
     "community-translate-type": "true",
     "app-ver": "1.0.35",
     "device-model": "2107113SI",
-    "flavor": "product",
+    flavor: "product",
     "build-mode": "release",
     "accept-language": "en-US",
-    "version": "1.0.35",
-    "device": "1",
-    "package": "com.contentsmadang.fancast",
+    version: "1.0.35",
+    device: "1",
+    package: "com.contentsmadang.fancast",
     "os-ver": "9",
-    "brightness": "light",
+    brightness: "light",
     "community-display-type": "list",
     "select-language": "en",
-    "accept": "application/json, text/plain, */*",
+    accept: "application/json, text/plain, */*",
     "cache-control": "no-cache",
-    "pragma": "no-cache",
+    pragma: "no-cache",
     "x-requested-with": "XMLHttpRequest",
   };
   if (env.X_FINGERPRINT) headers["fingerprint"] = env.X_FINGERPRINT;
 
-  const res = await fetch(upstream.toString(), { method: "GET", headers });
-  const text = await res.text();
-  let parsed: any; try { parsed = JSON.parse(text); } catch { parsed = { raw: text } };
+  const r = await fetch(upstream.toString(), { method: "GET", headers });
+  const text = await r.text();
+  let parsed: any; try { parsed = JSON.parse(text); } catch { parsed = { raw: text }; }
 
-  // Normalisasi ke bentuk yang dipakai UI
   const src = Array.isArray(parsed) ? parsed : (parsed.data || parsed.list || parsed.results || parsed.items || []);
   let nominee = (Array.isArray(src) ? src : []).map((it: any, i: number) => ({
     keyNominee: it?.keyNominee ?? it?.id ?? it?.key ?? String(i + 1),
@@ -55,7 +54,6 @@ export async function onRequest(context: any) {
     percent:    typeof it?.percent === "number" ? it.percent : undefined,
   }));
 
-  // hitung persen jika belum ada
   if (nominee.length && !nominee.some((n: any) => typeof n.percent === "number")) {
     const total = nominee.reduce((s: number, n: any) => s + (Number(n.count) || 0), 0);
     nominee = nominee.map((n: any) => ({
