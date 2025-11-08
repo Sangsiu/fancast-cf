@@ -1,0 +1,13 @@
+{
+  "name": "fancast-cf",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler pages dev ./public --functions=./functions",
+    "build": "echo \"no build\""
+  },
+  "devDependencies": {
+    "wrangler": "^3.79.0",
+    "typescript": "^5.6.3"
+  }
+}
