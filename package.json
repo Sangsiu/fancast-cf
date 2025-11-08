@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "wrangler pages dev ./public --functions=./functions",
-    "build": "echo \"no build\""
+    "build": "echo 'no build step'"
   },
   "devDependencies": {
-    "wrangler": "^3.79.0",
-    "typescript": "^5.6.3"
+    "wrangler": "^3.79.0"
   }
 }
